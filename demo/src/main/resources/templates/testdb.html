@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>데이터베이스 테스트</title>
+    <style>
+        /* 기본 간격 및 스타일 */
+        .user {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>User List</h1>
+    
+    <!-- users 리스트 반복 출력 -->
+    <div th:each="user : ${users}" class="user">
+        <p>아이디(기본키) : <span th:text="${user.id}"></span></p>
+        <p>이름 : <span th:text="${user.name}"></span></p>
+    </div>
+</body>
+</html>
