@@ -30,4 +30,15 @@ public class BlogService {
             return blogRepository.findById(id);
         }
         
+        public void update(Long id, AddArticleRequest request) {
+            Optional<Article> optionalArticle = blogRepository.findById(id);
+            optionalArticle.ifPresent(article -> {
+                article.update(request.getTitle(), request.getContent());
+                blogRepository.save(article);
+            });
+        }
+        public void delete(Long id) {
+            blogRepository.deleteById(id);
+            }
+        
 }

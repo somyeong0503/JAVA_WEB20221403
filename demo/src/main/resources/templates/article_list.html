@@ -5,6 +5,14 @@
     <title>블로그 게시판</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* 버튼을 가운데로 정렬 */
+        .action-buttons {
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            gap: 5px; /* 버튼 사이에 약간의 간격 추가 */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -26,6 +34,17 @@
                         <td th:text="${article.id}"></td>
                         <td th:text="${article.title}"></td>
                         <td th:text="${article.content}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <!-- 수정 버튼-->
+                                <a class="btn btn-warning" th:href="@{/article_edit/{id}(id=${article.id})}">수정</a>
+                                <!-- 삭제 버튼-->
+                                <form th:action="@{/api/article_delete/{id}(id=${article.id})}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit" class="btn btn-danger">삭제</button>
+                                    </form>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
