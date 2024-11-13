@@ -9,51 +9,21 @@
 <body>
     <div class="container">
         <h1 class="mt-5">블로그 게시판</h1>
-
-        <!-- 게시글 수정 폼 -->
-        <div class="mt-4">
-            <h2>게시글을 수정합니다</h2>
-            <form th:action="@{/api/article_edit/{id}(id=${article.id})}" method="post" name="content">
-                <!-- Hidden HTTP Method for PUT request -->
-                <input type="hidden" name="_method" value="put">
-                
-                <!-- 제목 필드 (수정할 게시글의 제목을 표시) -->
-                <div class="form-group">
-                    <label for="title">제목:</label>
-                    <input type="text" class="form-control" id="title" name="title" 
-                           th:value="${article.title}" required>
-                </div>
-                
-                <!-- 내용 필드 (수정할 게시글의 내용을 표시) -->
-                <div class="form-group">
-                    <label for="content">내용:</label>
-                    <textarea class="form-control" id="content" name="content" rows="5" required
-                              th:text="${article.content}"></textarea>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">수정</button>
-            </form>
-        </div>
-
         <!-- 게시글 리스트 -->
         <div class="mt-5">
             <h2>현재 수정할 게시글</h2>
             <table class="table table-bordered">
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>제목</th>
-                        <th>내용</th>
-                    </tr>
+                <tr>
+                <th>글내용</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td th:text="${article.id}"></td>
-                        <td th:text="${article.title}"></td>
-                        <td th:text="${article.content}"></td>
-                    </tr>
+                <tr th:each="board : ${boards}">
+                <td th:text="${board.content}"></td>
+                </tr>
                 </tbody>
-            </table>
+                </table>
         </div>
         <br />
     </div>
