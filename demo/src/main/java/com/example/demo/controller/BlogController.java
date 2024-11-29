@@ -16,6 +16,10 @@ import org.springframework.data.domain.Page;
 
 import com.example.demo.model.service.AddArticleRequest;
 import com.example.demo.model.service.BlogService;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import com.example.demo.model.domain.Board;
 
 @Controller
@@ -25,6 +29,7 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+    
 
     // 게시판 목록 조회
     @GetMapping("/board_list/basic")
@@ -36,12 +41,18 @@ public String boardListBasic(Model model) {
 
     // 게시글 보기
     @GetMapping("/board_view/{id}")
-    public String boardView(@PathVariable Long id, Model model) {
-        Board board = blogService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ID: " + id));
+public String boardView(@PathVariable String id, Model model) {
+    try {
+        Long longId = Long.parseLong(id);  // 문자열을 Long으로 변환
+        Board board = blogService.findById(longId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ID: " + longId));
         model.addAttribute("boards", board);
-        return "board_view";
+    } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("ID는 숫자여야 합니다.");
     }
+    return "board_view";
+}
+
 
     // 게시글 쓰기 페이지
     @GetMapping("/board_write")
@@ -67,7 +78,7 @@ public String boardListBasic(Model model) {
 
     // 게시글 수정 요청
     @PutMapping("/api/board_edit/{id}")
-    public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
+    public String updateBoard(@Valid @PathVariable Long id, @ModelAttribute AddArticleRequest request) {
         blogService.update(id, request);
         return "redirect:/board_list";
     }
@@ -99,29 +110,42 @@ public String boardListBasic(Model model) {
         return new HiddenHttpMethodFilter();
     }
 
-    @GetMapping("/board_list") // 새로운 게시판 링크지정
-public String boardList(
-        Model model,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "") String keyword) {
+    @GetMapping("/board_list")
+    public String boardList(Model model, 
+                            @RequestParam(defaultValue = "0") int page, 
+                            @RequestParam(defaultValue = "") String keyword, 
+                            HttpSession session) {
+        // 세션에서 사용자 ID 및 이메일 확인
+        String userId = (String) session.getAttribute("userId");
+        String uEmail = (String) session.getAttribute("email");
+        
+        if (userId == null || uEmail == null) {
+            return "redirect:/member_login"; // 로그인되지 않은 사용자 처리
+        }
+    
+        int pageSize = 3;  // 한 페이지의 게시글 수
+        PageRequest pageable = PageRequest.of(page, pageSize);
+    
+        // 키워드 유무에 따라 전체 조회 또는 키워드 검색 수행
+        Page<Board> list = keyword.isEmpty()
+                ? blogService.findAll(pageable)
+                : blogService.searchByKeyword(keyword, pageable);
+        
+        // 시작 번호 계산
+        int startNum = (page * pageSize) + 1;
+        
+        // 모델에 데이터 추가
+        model.addAttribute("boards", list);
+        model.addAttribute("totalPages", list.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("startNum", startNum);
+        model.addAttribute("email", uEmail);  // 이메일을 uEmail로 변경
+        model.addAttribute("keyword", keyword);
+    
+        return "board_list";  // board_list.html 템플릿 반환
+    }
+    
 
-    int pageSize = 3; // 한 페이지의 게시글 수
-    PageRequest pageable = PageRequest.of(page, pageSize);
-
-    Page<Board> list = keyword.isEmpty()
-            ? blogService.findAll(pageable)
-            : blogService.searchByKeyword(keyword, pageable);
-
-    // 시작 번호 계산
-    int startNum = (page * pageSize) + 1;
-
-    model.addAttribute("boards", list);
-    model.addAttribute("totalPages", list.getTotalPages());
-    model.addAttribute("currentPage", page); // currentPage 추가
-    model.addAttribute("startNum", startNum); // 시작 번호 추가
-    model.addAttribute("keyword", keyword);
-    return "board_list";
-}
 
 
 }

@@ -50,8 +50,8 @@ public class BlogService {
         return blogRepository.save(request.toEntity());
     }
 
-    // 게시글 수정
-    public void update(Long id, AddArticleRequest request) {
+     // 게시글 수정
+     public void update(Long id, AddArticleRequest request) {
         blogRepository.findById(id).ifPresent(board -> {
             board.update(
                 request.getTitle(),
@@ -60,6 +60,7 @@ public class BlogService {
                 request.getNewdate(),
                 request.getCount(),
                 request.getLikec()
+                
             );
             blogRepository.save(board);
         });
@@ -69,4 +70,5 @@ public class BlogService {
     public void delete(Long id) {
         blogRepository.deleteById(id);
     }
+
 }

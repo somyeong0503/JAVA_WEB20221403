@@ -3,13 +3,13 @@ package com.example.demo.model.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.demo.model.domain.Member;
-import com.example.demo.model.service.AddMemberRequest;
 import com.example.demo.model.repository.MemberRepository;
 
-import jakarta.validation.Valid; // Spring Boot 3.0 이상 (JDK 17 이상)
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
+
 
 
 import lombok.RequiredArgsConstructor;
