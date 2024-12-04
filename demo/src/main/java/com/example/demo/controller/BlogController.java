@@ -39,14 +39,20 @@ public String boardListBasic(Model model) {
     return "board_list";
 }
 
-    // 게시글 보기
-    @GetMapping("/board_view/{id}")
-public String boardView(@PathVariable String id, Model model) {
+@GetMapping("/board_view/{id}")
+public String boardView(@PathVariable String id, HttpSession session, Model model) {
     try {
-        Long longId = Long.parseLong(id);  // 문자열을 Long으로 변환
+        Long longId = Long.parseLong(id); // 문자열을 Long으로 변환
         Board board = blogService.findById(longId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ID: " + longId));
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ID: " + longId));
+        
+        // 로그인한 사용자 이메일 가져오기
+        String loggedInUser = (String) session.getAttribute("email");
+        System.out.println("[DEBUG] 현재 로그인한 사용자: " + loggedInUser);
+
+        // 모델에 게시글과 로그인 사용자 정보 추가
         model.addAttribute("boards", board);
+        model.addAttribute("loggedInUser", loggedInUser); // 현재 로그인한 사용자 추가
     } catch (NumberFormatException e) {
         throw new IllegalArgumentException("ID는 숫자여야 합니다.");
     }
@@ -54,11 +60,23 @@ public String boardView(@PathVariable String id, Model model) {
 }
 
 
-    // 게시글 쓰기 페이지
-    @GetMapping("/board_write")
-    public String boardWrite() {
-        return "board_write";
+
+@GetMapping("/board_write")
+public String boardWrite(HttpSession session, Model model) {
+    // 세션에서 이메일 정보 가져오기
+    String email = (String) session.getAttribute("email");
+    System.out.println("[DEBUG] 로그인된 사용자 이메일: " + email);
+
+    // 이메일이 없는 경우 기본값 설정
+    if (email == null || email.isEmpty()) {
+        email = "guest@example.com"; // 기본값
     }
+
+    // 모델에 이메일 추가
+    model.addAttribute("email", email);
+    return "board_write";
+}
+
 
     // 게시글 저장
     @PostMapping("/api/boards")
@@ -144,8 +162,5 @@ public String boardView(@PathVariable String id, Model model) {
     
         return "board_list";  // board_list.html 템플릿 반환
     }
-    
-
-
 
 }
