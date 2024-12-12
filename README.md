@@ -123,12 +123,14 @@
 </p>
 
 ## * 11주차 수업 *
- - 프로필 메일 업로딩 기능, 맵 기능 수정 완료
+ - 프로필 메일 업로딩 기능, 맵 기능 수정 완료, 깃허브 포트폴리오 웹 사이트 구현 완료 
 <p align="center">
   <img width="300" alt="image" src="https://github.com/user-attachments/assets/6d2e4e44-92ee-4118-ac97-da2e3f9e5130">
   <img width="300" alt="image" src="https://github.com/user-attachments/assets/12ae529a-b707-437b-915e-c2792540d770">
   <img width="300" alt="image" src="https://github.com/user-attachments/assets/84abf480-28e3-41da-a98d-44a42b9c740d">
   <img width="300" alt="image" src="https://github.com/user-attachments/assets/676c79b5-8e68-4150-ab9e-3a3251f8e582">
+  <img heihgt="80" alt="image" src="https://github.com/user-attachments/assets/51c70f04-7164-4736-86bb-1aa4adb8eaee">
+
 </p>
 
 ####  ➜ 11주차 응용 문제 & 추가 구현 완료
