@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +28,6 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
-    
 
     // 게시판 목록 조회
     @GetMapping("/board_list/basic")
@@ -39,6 +37,8 @@ public String boardListBasic(Model model) {
     return "board_list";
 }
 
+// 특정 게시글 상세 보기 처리
+// GET 요청으로 "/board_view/{id}" URL에 매핑
 @GetMapping("/board_view/{id}")
 public String boardView(@PathVariable String id, HttpSession session, Model model) {
     try {
@@ -59,8 +59,8 @@ public String boardView(@PathVariable String id, HttpSession session, Model mode
     return "board_view";
 }
 
-
-
+// 게시글 작성 화면 처리
+// GET 요청으로 "/board_write" URL에 매핑
 @GetMapping("/board_write")
 public String boardWrite(HttpSession session, Model model) {
     // 세션에서 이메일 정보 가져오기
@@ -76,7 +76,6 @@ public String boardWrite(HttpSession session, Model model) {
     model.addAttribute("email", email);
     return "board_write";
 }
-
 
     // 게시글 저장
     @PostMapping("/api/boards")
@@ -128,6 +127,8 @@ public String boardWrite(HttpSession session, Model model) {
         return new HiddenHttpMethodFilter();
     }
 
+    // 게시판 목록 조회를 처리하는 메서드
+    // GET 요청으로 "/board_list" URL에 매핑
     @GetMapping("/board_list")
     public String boardList(Model model, 
                             @RequestParam(defaultValue = "0") int page, 
