@@ -134,8 +134,11 @@
 ####  ➜ 11주차 응용 문제 & 추가 구현 완료
  - 로그인,로그아웃 세션 처리 수정, 파일 업로드 기능 구현 완료
 <p align="center">
- <img width="200" alt="image" src="https://github.com/user-attachments/assets/d0a9a751-6304-49dd-ada8-fce69694c2b8">
- <img width="200" alt="image" src="https://github.com/user-attachments/assets/507e30a9-f15c-49db-b76e-acf289de0be5">
+ <img width="300" alt="image" src="https://github.com/user-attachments/assets/517d3fc5-fd06-4ba8-8781-3fc92982c343" >
+ <img height="200" src="https://github.com/user-attachments/assets/f42358f6-a958-4ec1-8c13-26083286d1da" >
+ <img width="300" alt="image" src="https://github.com/user-attachments/assets/d5d44955-fc0b-400e-b715-97ca480f6daf" >
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/88ab7fb6-3164-467b-9ac1-c40d438c4ec9" >
+
 </p>
    
 ## * 개인 추가 구현 *
