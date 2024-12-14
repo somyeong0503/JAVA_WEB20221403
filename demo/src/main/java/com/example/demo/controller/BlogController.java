@@ -37,6 +37,43 @@ public String boardListBasic(Model model) {
     return "board_list";
 }
 
+// 게시판 목록 조회를 처리하는 메서드
+    // GET 요청으로 "/board_list" URL에 매핑
+    @GetMapping("/board_list")
+    public String boardList(Model model, 
+                            @RequestParam(defaultValue = "0") int page, 
+                            @RequestParam(defaultValue = "") String keyword, 
+                            HttpSession session) {
+        // 세션에서 사용자 ID 및 이메일 확인
+        String userId = (String) session.getAttribute("userId");
+        String uEmail = (String) session.getAttribute("email");
+        
+        if (userId == null || uEmail == null) {
+            return "redirect:/member_login"; // 로그인되지 않은 사용자 처리
+        }
+    
+        int pageSize = 3;  // 한 페이지의 게시글 수
+        PageRequest pageable = PageRequest.of(page, pageSize);
+    
+        // 키워드 유무에 따라 전체 조회 또는 키워드 검색 수행
+        Page<Board> list = keyword.isEmpty()
+                ? blogService.findAll(pageable)
+                : blogService.searchByKeyword(keyword, pageable);
+        
+        // 시작 번호 계산
+        int startNum = (page * pageSize) + 1;
+        
+        // 모델에 데이터 추가
+        model.addAttribute("boards", list);
+        model.addAttribute("totalPages", list.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("startNum", startNum);
+        model.addAttribute("email", uEmail);  // 이메일을 uEmail로 변경
+        model.addAttribute("keyword", keyword);
+    
+        return "board_list";  // board_list.html 템플릿 반환
+    }
+
 // 특정 게시글 상세 보기 처리
 // GET 요청으로 "/board_view/{id}" URL에 매핑
 @GetMapping("/board_view/{id}")
@@ -127,41 +164,5 @@ public String boardWrite(HttpSession session, Model model) {
         return new HiddenHttpMethodFilter();
     }
 
-    // 게시판 목록 조회를 처리하는 메서드
-    // GET 요청으로 "/board_list" URL에 매핑
-    @GetMapping("/board_list")
-    public String boardList(Model model, 
-                            @RequestParam(defaultValue = "0") int page, 
-                            @RequestParam(defaultValue = "") String keyword, 
-                            HttpSession session) {
-        // 세션에서 사용자 ID 및 이메일 확인
-        String userId = (String) session.getAttribute("userId");
-        String uEmail = (String) session.getAttribute("email");
-        
-        if (userId == null || uEmail == null) {
-            return "redirect:/member_login"; // 로그인되지 않은 사용자 처리
-        }
-    
-        int pageSize = 3;  // 한 페이지의 게시글 수
-        PageRequest pageable = PageRequest.of(page, pageSize);
-    
-        // 키워드 유무에 따라 전체 조회 또는 키워드 검색 수행
-        Page<Board> list = keyword.isEmpty()
-                ? blogService.findAll(pageable)
-                : blogService.searchByKeyword(keyword, pageable);
-        
-        // 시작 번호 계산
-        int startNum = (page * pageSize) + 1;
-        
-        // 모델에 데이터 추가
-        model.addAttribute("boards", list);
-        model.addAttribute("totalPages", list.getTotalPages());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("startNum", startNum);
-        model.addAttribute("email", uEmail);  // 이메일을 uEmail로 변경
-        model.addAttribute("keyword", keyword);
-    
-        return "board_list";  // board_list.html 템플릿 반환
-    }
 
 }
