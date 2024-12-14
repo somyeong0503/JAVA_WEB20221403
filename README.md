@@ -142,5 +142,3 @@
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/88ab7fb6-3164-467b-9ac1-c40d438c4ec9" >
 
 </p>
-   
-## * 개인 추가 구현 *
